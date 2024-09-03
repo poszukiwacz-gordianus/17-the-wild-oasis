@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 
 import { useCreateCabin } from "./useCreateCabin";
-import { useEditCabin } from "./useEditCabin";
+import { useUpdateCabin } from "./useUpdateCabin";
 
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
@@ -17,7 +17,7 @@ CreateCabinForm.propTypes = {
 
 function CreateCabinForm({ cabinToEdit = {} }) {
   const { isCreating, createCabin } = useCreateCabin();
-  const { isEditing, editCabin } = useEditCabin();
+  const { isEditing, updateCabin } = useUpdateCabin();
 
   const isWorking = isCreating || isEditing;
 
@@ -33,7 +33,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
     if (isEditSession)
-      editCabin(
+      updateCabin(
         {
           newCabinData: { ...data, image },
           id: editId,

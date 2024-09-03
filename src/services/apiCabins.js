@@ -11,7 +11,7 @@ export async function getCabins() {
   return data;
 }
 
-export async function createEditCabin(
+export async function createUpdateCabin(
   newCabin,
   id,
   isEditSession = false,
