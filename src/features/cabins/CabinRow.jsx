@@ -60,7 +60,7 @@ function CabinRow({ cabin }) {
   const queryClient = useQueryClient();
 
   const { isLoading: isDeleting, mutate } = useMutation({
-    mutationFn: deleteCabin,
+    mutationFn: (cabinId) => deleteCabin(cabinId, image),
     onSuccess: () => {
       toast.success("Cabin successfully deleted"),
         queryClient.invalidateQueries({
@@ -85,7 +85,9 @@ function CabinRow({ cabin }) {
           </button>
         </div>
       </TableRow>
-      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+      {showForm && (
+        <CreateCabinForm cabinToEdit={cabin} onShowForm={setShowForm} />
+      )}
     </>
   );
 }

@@ -11,7 +11,7 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onShowForm }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
 
@@ -36,13 +36,14 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   });
 
   const { mutate: editCabin, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
+    mutationFn: ({ newCabinData, id }) =>
+      createEditCabin(newCabinData, id, true, cabinToEdit.image),
     onSuccess: () => {
       toast.success("Cabin successfully edited");
       queryClient.invalidateQueries({
         queryKey: ["cabins"],
       });
-      reset();
+      onShowForm((show) => !show);
     },
     onError: (err) => {
       toast.error(err.message);
