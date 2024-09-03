@@ -19,7 +19,6 @@ export async function createEditCabin(
 ) {
   const oldImagePath = imageToDelete?.split("/").at(8);
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
-  const uploadNewImage = Boolean(hasImagePath);
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
@@ -47,7 +46,7 @@ export async function createEditCabin(
   }
 
   //2. Upload/Delete image
-  if (!uploadNewImage) {
+  if (!hasImagePath) {
     //A) Upload new image
     const { error: storageError } = await supabase.storage
       .from("cabin-images")
