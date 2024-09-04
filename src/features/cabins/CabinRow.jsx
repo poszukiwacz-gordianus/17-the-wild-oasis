@@ -91,6 +91,7 @@ function CabinRow({ cabin }) {
             <Modal.Window name="edit">
               <CreateCabinForm cabinToUpdate={cabin} />
             </Modal.Window>
+
             <Modal.Open opens="delete">
               <button disabled={isDeleting}>
                 <HiTrash />
