@@ -1,6 +1,8 @@
 import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
+import PropTypes from "prop-types";
 import { HiXMark } from "react-icons/hi2";
+import useOutsideClick from "../hooks/useOutsideClick";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -52,6 +54,15 @@ const Button = styled.button`
   }
 `;
 
+Modal.propTypes = {
+  children: PropTypes.any,
+};
+
+Window.propTypes = {
+  children: PropTypes.any,
+  name: PropTypes.string,
+};
+
 //1. Create a context
 const ModalContext = createContext();
 
@@ -78,11 +89,14 @@ function Open({ children, opens: opensWindowName }) {
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
+
+  const ref = useOutsideClick(close);
+
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
