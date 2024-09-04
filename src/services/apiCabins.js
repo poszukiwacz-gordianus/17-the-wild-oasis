@@ -17,9 +17,13 @@ export async function createUpdateCabin(
   isEditSession = false,
   imageToDelete
 ) {
+  //Gets image name to delete
   const oldImagePath = imageToDelete?.split("/").at(8);
+  //Checks if there is more than one cabin using this image
+  const isMoreThanOneCabinUsingThisImage = await getByImage(imageToDelete);
+  //Cheks if user adds new image
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
-
+  //Creates random image name
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
     ""
@@ -62,8 +66,8 @@ export async function createUpdateCabin(
       );
     }
 
-    //B) Delete old image from bucket if image is in edit mode and new image was uploaded
-    if (isEditSession) {
+    //B) Delete old image from bucket if image is in edit mode and new image was uploaded and only one cabin is using this image
+    if (isEditSession && isMoreThanOneCabinUsingThisImage === 1) {
       await supabase.storage.from("cabin-images").remove(oldImagePath);
     }
 
@@ -72,14 +76,36 @@ export async function createUpdateCabin(
 }
 
 export async function deleteCabin(id, image) {
-  const deleteImage = image.split("/").at(8);
+  //Get image name
+  const imageName = image?.split("/").at(8);
+  //Checks if there is more than one cabin using this image
+  const isMoreThanOneCabinUsingThisImage = await getByImage(image);
+
+  //Deletes cabin from supabase
   const { data, error } = await supabase.from("cabins").delete().eq("id", id);
-  await supabase.storage.from("cabin-images").remove(deleteImage);
 
   if (error) {
     console.error(error);
     throw new Error("Cabin could not be deleted");
   }
 
+  //Delete image of deleted cabin from supabase bucket if only one cabin was using this image
+  if (isMoreThanOneCabinUsingThisImage === 1)
+    await supabase.storage.from("cabin-images").remove(imageName);
+
   return data;
+}
+
+export async function getByImage(image) {
+  const { data, error } = await supabase
+    .from("cabins")
+    .select("image")
+    .eq("image", image);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Cabin could not be deleted");
+  }
+
+  return data.length;
 }

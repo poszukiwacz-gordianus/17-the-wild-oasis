@@ -1,8 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  createRef,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
-import useOutsideClick from "../hooks/useOutsideClick";
+import useCloseOnOutsideInteraction from "../hooks/useCloseOnOutsideInteraction";
 
 const Menu = styled.div`
   display: flex;
@@ -104,31 +110,20 @@ function Toogle({ id }) {
 
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
 
-  useEffect(() => {
-    function handleScroll() {
-      //Close menus list
-      close();
-
-      //Remove events listener
-      document.removeEventListener("scroll", handleScroll);
-      document
-        .querySelector("#root > div.sc-dhCplO.fofMkm > main")
-        .removeEventListener("scroll", handleScroll);
-    }
-
-    //Add event listener to document, don't know why main is not included in document so also add event listener to main manualy
-    document.addEventListener("scroll", handleScroll);
-    document
-      .querySelector("#root > div.sc-dhCplO.fofMkm > main")
-      .addEventListener("scroll", handleScroll);
-  }, [close]);
+  const scroll = useCloseOnOutsideInteraction(close, "scroll");
+  const click = useCloseOnOutsideInteraction(close, "click");
 
   if (openId !== id) return null;
 
   return createPortal(
-    <StyledList position={position} ref={ref}>
+    <StyledList
+      position={position}
+      ref={(el) => {
+        scroll.current = el;
+        click.current = el;
+      }}
+    >
       {children}
     </StyledList>,
     document.body

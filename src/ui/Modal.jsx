@@ -2,7 +2,7 @@ import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import { HiXMark } from "react-icons/hi2";
-import useOutsideClick from "../hooks/useOutsideClick";
+import useCloseOnOutsideInteraction from "../hooks/useCloseOnOutsideInteraction";
 import styled from "styled-components";
 
 const StyledModal = styled.div`
@@ -90,7 +90,7 @@ function Open({ children, opens: opensWindowName }) {
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
 
-  const ref = useOutsideClick(close);
+  const ref = useCloseOnOutsideInteraction(close);
 
   if (name !== openName) return null;
 
