@@ -44,11 +44,11 @@ Filter.propTypes = {
 function Filter({ filterField, options }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get(filterField) || options.at(0).value;
-  const page = searchParams.get("page");
-  if (page) searchParams.delete("page");
 
   function handleClick(value) {
     searchParams.set(filterField, value);
+    if (searchParams.get("page")) searchParams.delete("page");
+
     setSearchParams(searchParams);
   }
 
