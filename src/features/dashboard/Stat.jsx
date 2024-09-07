@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledStat = styled.div`
   /* Box */
@@ -46,6 +47,13 @@ const Value = styled.p`
   line-height: 1;
   font-weight: 500;
 `;
+
+Stat.propTypes = {
+  icon: PropTypes.element,
+  title: PropTypes.string,
+  value: PropTypes.any,
+  color: PropTypes.string,
+};
 
 function Stat({ icon, title, value, color }) {
   return (
