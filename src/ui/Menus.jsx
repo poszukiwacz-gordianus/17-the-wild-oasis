@@ -93,6 +93,7 @@ function Toogle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
+    e.stopPropagation();
     const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
@@ -112,7 +113,7 @@ function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
 
   const scroll = useCloseOnOutsideInteraction(close, "scroll");
-  const click = useCloseOnOutsideInteraction(close, "click");
+  const click = useCloseOnOutsideInteraction(close, "click", false);
 
   if (openId !== id) return null;
 

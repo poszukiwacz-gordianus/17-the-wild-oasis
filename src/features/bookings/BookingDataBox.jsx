@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { format, isToday } from "date-fns";
 import {
   HiOutlineChatBubbleBottomCenterText,
@@ -100,6 +101,10 @@ const Footer = styled.footer`
   color: var(--color-grey-500);
   text-align: right;
 `;
+
+BookingDataBox.propTypes = {
+  booking: PropTypes.object,
+};
 
 // A purely presentational component
 function BookingDataBox({ booking }) {
