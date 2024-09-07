@@ -6,7 +6,7 @@ import Row from "../ui/Row";
 import Spinner from "../ui/Spinner";
 
 function Dashboard() {
-  const { bookings, isLoading } = useRecentBookings();
+  const { isLoading } = useRecentBookings();
 
   if (isLoading) return <Spinner />;
 
