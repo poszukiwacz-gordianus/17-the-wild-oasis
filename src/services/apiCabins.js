@@ -104,7 +104,7 @@ export async function getByImage(image) {
 
   if (error) {
     console.error(error);
-    throw new Error("Cabin could not be deleted");
+    throw new Error("Get image error");
   }
 
   return data.length;

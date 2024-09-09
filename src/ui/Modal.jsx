@@ -1,9 +1,11 @@
 import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
-import { HiXMark } from "react-icons/hi2";
-import useCloseOnOutsideInteraction from "../hooks/useCloseOnOutsideInteraction";
 import styled from "styled-components";
+
+import { HiXMark } from "react-icons/hi2";
+
+import useCloseOnOutsideInteraction from "../hooks/useCloseOnOutsideInteraction";
 
 const StyledModal = styled.div`
   position: fixed;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const StyledFormRow = styled.div`
   display: flex;
@@ -15,6 +16,12 @@ const Error = styled.span`
   font-size: 1.4rem;
   color: var(--color-red-700);
 `;
+
+FormRowVertical.propTypes = {
+  label: PropTypes.string,
+  error: PropTypes.any,
+  children: PropTypes.any,
+};
 
 function FormRowVertical({ label, error, children }) {
   return (

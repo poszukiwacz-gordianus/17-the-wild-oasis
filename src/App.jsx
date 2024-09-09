@@ -20,13 +20,13 @@ import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
+
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // staleTime: 60 * 1000,
       staleTime: 0,
     },
   },
@@ -50,7 +50,7 @@ function App() {
           <GlobalStyles />
           <BrowserRouter>
             <Routes>
-              <Route index element={<Navigate replace to="/login" />} />
+              <Route index element={<Navigate replace to="dashboard" />} />
 
               <Route path="login" element={<Login />} />
               <Route path="*" element={<PageNotFound />} />

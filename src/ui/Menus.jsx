@@ -1,13 +1,10 @@
-import {
-  createContext,
-  createRef,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+
+import { HiEllipsisVertical } from "react-icons/hi2";
+
 import useCloseOnOutsideInteraction from "../hooks/useCloseOnOutsideInteraction";
 
 const Menu = styled.div`
@@ -71,6 +68,10 @@ const StyledButton = styled.button`
   }
 `;
 
+Menus.propTypes = {
+  children: PropTypes.any,
+};
+
 const MenusContext = createContext();
 
 function Menus({ children }) {
@@ -89,16 +90,23 @@ function Menus({ children }) {
   );
 }
 
+Toogle.propTypes = {
+  id: PropTypes.number,
+};
+
 function Toogle({ id }) {
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
+    //Stop bubbling phase
     e.stopPropagation();
+
     const rect = e.target.closest("button").getBoundingClientRect();
     setPosition({
       x: window.innerWidth - rect.width - rect.x,
       y: rect.y + rect.height + 8,
     });
+
     openId === "" || openId !== id ? open(id) : close();
   }
 
@@ -109,30 +117,38 @@ function Toogle({ id }) {
   );
 }
 
+List.propTypes = {
+  children: PropTypes.any,
+  id: PropTypes.number,
+};
+
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
 
-  const scroll = useCloseOnOutsideInteraction(close, "scroll");
-  const click = useCloseOnOutsideInteraction(close, "click", false);
+  const ref = useCloseOnOutsideInteraction(close, [
+    { event: "scroll", listenCapturing: true },
+    { event: "click", listenCapturing: false },
+  ]);
 
   if (openId !== id) return null;
 
   return createPortal(
-    <StyledList
-      position={position}
-      ref={(el) => {
-        scroll.current = el;
-        click.current = el;
-      }}
-    >
+    <StyledList position={position} ref={ref}>
       {children}
     </StyledList>,
     document.body
   );
 }
 
+Button.propTypes = {
+  children: PropTypes.any,
+  icon: PropTypes.element,
+  onClick: PropTypes.func,
+};
+
 function Button({ children, icon, onClick }) {
   const { close } = useContext(MenusContext);
+
   function handleClick() {
     onClick?.();
     close();

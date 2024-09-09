@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect } from "react";
+import PropTypes from "prop-types";
+
 import { useLocalStorageState } from "../hooks/useLocalStorageState";
+
+DarkModeProvider.propTypes = {
+  children: PropTypes.any,
+};
 
 const DarkModeContext = createContext();
 

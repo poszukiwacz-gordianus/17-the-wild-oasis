@@ -1,6 +1,9 @@
 import styled from "styled-components";
-import Heading from "./Heading";
+import PropTypes from "prop-types";
+
 import GlobalStyles from "../styles/GlobalStyles";
+
+import Heading from "./Heading";
 import Button from "./Button";
 
 const StyledErrorFallback = styled.main`
@@ -32,6 +35,11 @@ const Box = styled.div`
     color: var(--color-grey-500);
   }
 `;
+
+ErrorFallback.propTypes = {
+  error: PropTypes.any,
+  resetErrorBoundary: PropTypes.any,
+};
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (

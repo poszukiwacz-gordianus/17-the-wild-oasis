@@ -2,24 +2,23 @@ import { useNavigate } from "react-router-dom";
 import { format, isToday } from "date-fns";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-
-import Tag from "../../ui/Tag";
-import Table from "../../ui/Table";
-import Menus from "../../ui/Menus";
-
-import { useCheckOut } from "../check-in-out/useCheckout";
-import { useDeleteBooking } from "../check-in-out/useDeleteBooking";
-import { formatDistanceFromNow } from "../../utils/helpers";
-import { formatCurrency } from "../../utils/helpers";
-
 import {
   HiArrowDownOnSquare,
   HiArrowUpOnSquare,
   HiEye,
   HiTrash,
 } from "react-icons/hi2";
+
+import Tag from "../../ui/Tag";
+import Table from "../../ui/Table";
+import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
+
+import { useCheckOut } from "../check-in-out/useCheckout";
+import { useDeleteBooking } from "../check-in-out/useDeleteBooking";
+import { formatDistanceFromNow } from "../../utils/helpers";
+import { formatCurrency } from "../../utils/helpers";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -55,11 +54,9 @@ BookingRow.propTypes = {
 function BookingRow({
   booking: {
     id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
-    numGuests,
     totalPrice,
     status,
     guests: { fullName: guestName, email },

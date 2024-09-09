@@ -2,8 +2,7 @@ import { useEffect, useRef } from "react";
 
 export default function useCloseOnOutsideInteraction(
   handler,
-  event = "click",
-  listenCapturing = true
+  options = [{ event: "click", listenCapturing: true }]
 ) {
   const ref = useRef();
 
@@ -14,11 +13,23 @@ export default function useCloseOnOutsideInteraction(
       }
     }
 
-    document.addEventListener(event, handleEvent, listenCapturing);
+    options.map((option) =>
+      document.addEventListener(
+        option.event,
+        handleEvent,
+        option.listenCapturing
+      )
+    );
 
     return () =>
-      document.removeEventListener(event, handleEvent, listenCapturing);
-  }, [handler, ref, listenCapturing, event]);
+      options.map((option) =>
+        document.removeEventListener(
+          option.event,
+          handleEvent,
+          option.listenCapturing
+        )
+      );
+  }, [handler, ref, options]);
 
   return ref;
 }

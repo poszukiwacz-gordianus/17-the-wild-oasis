@@ -1,11 +1,12 @@
 import { useSearchParams } from "react-router-dom";
-import { useCabins } from "./useCabins";
 
 import Spinner from "../../ui/Spinner";
 import Table from "../../ui/Table";
 import CabinRow from "./CabinRow";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
+
+import { useCabins } from "./useCabins";
 
 function CabinTable() {
   const { isLoading, cabins } = useCabins();

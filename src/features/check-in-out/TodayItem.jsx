@@ -1,9 +1,14 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+
 import Tag from "../../ui/Tag";
 import { Flag } from "../../ui/Flag";
 import Button from "../../ui/Button";
-import { Link } from "react-router-dom";
-import CheckoutButton from "./CheckoutButton";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+
+import { useCheckOut } from "./useCheckout";
 
 const StyledTodayItem = styled.li`
   display: grid;
@@ -24,8 +29,13 @@ const Guest = styled.div`
   font-weight: 500;
 `;
 
+TodayItem.propTypes = {
+  activity: PropTypes.object,
+};
+
 function TodayItem({ activity }) {
   const { id, status, guests, numNights } = activity;
+  const { checkout, isCheckingOut } = useCheckOut();
 
   return (
     <StyledTodayItem>
@@ -47,7 +57,26 @@ function TodayItem({ activity }) {
         </Button>
       )}
 
-      {status === "checked-in" && <CheckoutButton bookingId={id} />}
+      {status === "checked-in" && (
+        <Modal>
+          <Modal.Open opens="checkout">
+            <Button size="small" variation="primary" disabled={isCheckingOut}>
+              Check out
+            </Button>
+          </Modal.Open>
+
+          <Modal.Window name="checkout">
+            <ConfirmDelete
+              action="Check out"
+              resourceName={`booking #${id}`}
+              disabled={isCheckingOut}
+              onConfirm={() => {
+                checkout(id);
+              }}
+            />
+          </Modal.Window>
+        </Modal>
+      )}
     </StyledTodayItem>
   );
 }
