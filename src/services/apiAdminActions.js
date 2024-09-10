@@ -1,3 +1,4 @@
+import { checkIsAdmin } from "../utils/isAdmin";
 import { getCurrentUser } from "./apiAuth";
 import supabase from "./supabase";
 
@@ -8,32 +9,32 @@ export async function createUserByAdmin({
   role,
   phone,
 }) {
-  const { data, error } = await supabase.auth.admin.createUser({
-    email,
-    phone,
-    password,
-    user_metadata: { fullName, role, avatar: "", email },
-    email_confirm: true,
-    phone_confirm: true,
-  });
+  const isAdmin = await checkIsAdmin();
 
-  if (error) throw new Error(error.message);
+  if (isAdmin) {
+    const { data, error } = await supabase.auth.admin.createUser({
+      email,
+      phone,
+      password,
+      user_metadata: { fullName, role, avatar: "", email },
+      email_confirm: true,
+      phone_confirm: true,
+    });
 
-  return data;
+    if (error) throw new Error(error.message);
+
+    return data;
+  } else return null;
 }
 
 export async function getAllUsers() {
-  const user = await getCurrentUser();
-  const isAdmin = user.user_metadata.role === "admin";
+  const isAdmin = await checkIsAdmin();
 
   if (isAdmin) {
-    // Access auth admin api
-    const adminAuthClient = supabase.auth.admin;
-
     const {
       data: { users },
       error,
-    } = await adminAuthClient.listUsers();
+    } = await supabase.auth.admin.listUsers();
 
     if (error) throw new Error(error.message);
     return users;
@@ -46,29 +47,60 @@ export async function updateUserByAdmin({
   userId,
   userData: { phone, fullName, role, password },
 }) {
-  let updateData = {
-    phone,
-    user_metadata: { fullName, role },
-  };
+  const isAdmin = await checkIsAdmin();
 
-  if (password !== "") {
-    updateData = { password, ...updateData };
+  const currentUser = await getCurrentUser();
+  console.log(currentUser);
+
+  if (isAdmin) {
+    let updateData = {
+      phone,
+      user_metadata: { fullName, role },
+    };
+
+    if (password !== "") {
+      updateData = { password, ...updateData };
+    }
+
+    const { data: user, error } = await supabase.auth.admin.updateUserById(
+      userId,
+      updateData
+    );
+
+    if (error) throw new Error("User could not be updated");
+
+    return user;
+  } else {
+    return null;
   }
-
-  const { data: user, error } = await supabase.auth.admin.updateUserById(
-    userId,
-    updateData
-  );
-
-  if (error) throw new Error("User could not be updated");
-
-  return user;
 }
 
 export async function deleteUserByAdmin({ userId }) {
-  const { error } = await supabase.auth.admin.deleteUser(userId);
+  const isAdmin = await checkIsAdmin();
 
-  if (error) throw new Error("User was not deleted");
+  if (isAdmin) {
+    //Get avatar path to delete from supabase
+    const {
+      data: {
+        user: {
+          user_metadata: { avatar },
+        },
+      },
+    } = await supabase.auth.admin.getUserById(userId);
+    const oldAvatar = avatar.split("/").at(8);
 
-  return error;
+    //Delete user
+    const { error } = await supabase.auth.admin.deleteUser(userId);
+
+    if (error) throw new Error("User was not deleted");
+
+    //Delete old avatar from supabase
+    const { error: deleteAvatar } = await supabase.storage
+      .from("avatars")
+      .remove(oldAvatar);
+
+    if (deleteAvatar) throw new Error(deleteAvatar.message);
+
+    return error;
+  } else return null;
 }

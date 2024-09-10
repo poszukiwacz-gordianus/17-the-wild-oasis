@@ -37,11 +37,11 @@ const StyledDiv = styled.div`
   color: var(--color-green-700);
 `;
 
-CabinRow.propTypes = {
+UserRow.propTypes = {
   user: PropTypes.object,
 };
 
-function CabinRow({ user }) {
+function UserRow({ user }) {
   const { deleteUserByAdmin, isDeleting } = useDeleteUserByAdmin();
 
   const {
@@ -99,4 +99,4 @@ function CabinRow({ user }) {
   );
 }
 
-export default CabinRow;
+export default UserRow;

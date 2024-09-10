@@ -29,7 +29,6 @@ function UsersTable() {
           render={(user) => <UserRow key={user.id} user={user} />}
         />
       </Table>
-      <Table.Footer>{/* <Pagination count={count} /> */}</Table.Footer>
     </Menus>
   );
 }
