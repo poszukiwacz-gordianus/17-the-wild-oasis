@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-
 import {
   HiOutlineCalendarDays,
   HiOutlineCog6Tooth,
@@ -8,6 +7,8 @@ import {
   HiOutlineHomeModern,
   HiOutlineUser,
 } from "react-icons/hi2";
+
+import { useAdmin } from "../features/users/useAdmin";
 
 const NavList = styled.ul`
   display: flex;
@@ -55,6 +56,8 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 function MainNav() {
+  const { isAdmin } = useAdmin();
+
   return (
     <nav>
       <NavList>
@@ -76,12 +79,14 @@ function MainNav() {
             <span>Cabins</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/users">
-            <HiOutlineUser />
-            <span>Users</span>
-          </StyledNavLink>
-        </li>
+        {isAdmin && (
+          <li>
+            <StyledNavLink to="/users">
+              <HiOutlineUser />
+              <span>Users</span>
+            </StyledNavLink>
+          </li>
+        )}
         <li>
           <StyledNavLink to="/settings">
             <HiOutlineCog6Tooth />

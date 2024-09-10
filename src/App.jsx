@@ -23,6 +23,7 @@ import Checkin from "./pages/Checkin";
 
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import AdminOnly from "./ui/AdminOnly";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,7 +68,14 @@ function App() {
                 <Route path="booking/:bookingId" element={<Booking />} />
                 <Route path="checkin/:bookingId" element={<Checkin />} />
                 <Route path="cabins" element={<Cabins />} />
-                <Route path="users" element={<Users />} />
+                <Route
+                  path="users"
+                  element={
+                    <AdminOnly>
+                      <Users />
+                    </AdminOnly>
+                  }
+                />
                 <Route path="settings" element={<Settings />} />
                 <Route path="account" element={<Account />} />
               </Route>

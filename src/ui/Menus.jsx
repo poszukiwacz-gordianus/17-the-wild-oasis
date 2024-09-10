@@ -91,7 +91,7 @@ function Menus({ children }) {
 }
 
 Toogle.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.any,
 };
 
 function Toogle({ id }) {
@@ -119,7 +119,7 @@ function Toogle({ id }) {
 
 List.propTypes = {
   children: PropTypes.any,
-  id: PropTypes.number,
+  id: PropTypes.any,
 };
 
 function List({ id, children }) {
