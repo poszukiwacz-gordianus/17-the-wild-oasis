@@ -46,7 +46,7 @@ export async function createUpdateCabin(
 
   if (error) {
     console.error(error);
-    throw new Error("Cabin could not been created");
+    throw new Error("Cabin could not be created");
   }
 
   //2. Upload/Delete image

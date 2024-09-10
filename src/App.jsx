@@ -1,6 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
 import { Toaster } from "react-hot-toast";
@@ -24,6 +23,7 @@ import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import AdminOnly from "./ui/AdminOnly";
+import Registration from "./pages/Registration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,7 +47,6 @@ function App() {
     <DarkModeProvider>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
           <GlobalStyles />
           <BrowserRouter>
             <Routes>
@@ -64,6 +63,7 @@ function App() {
                 }
               >
                 <Route path="dashboard" element={<Dashboard />} />
+                <Route path="registration" element={<Registration />} />
                 <Route path="bookings" element={<Bookings />} />
                 <Route path="booking/:bookingId" element={<Booking />} />
                 <Route path="checkin/:bookingId" element={<Checkin />} />

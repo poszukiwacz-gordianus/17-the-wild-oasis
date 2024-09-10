@@ -13,7 +13,7 @@ import { useCreateUserByAdmin } from "./useCreateUserByAdmin";
 // Email regex: /\S+@\S+\.\S+/
 
 const Select = styled.select`
-  width: 200px;
+  width: 100%;
   font-size: 1.4rem;
   padding: 0.8rem 1.2rem;
   border: 1px solid var(--color-grey-300);
@@ -71,7 +71,10 @@ function SignupForm({ userToUpdate = {}, onCloseModal }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Full name" error={errors?.fullName?.message}>
         <Input
           type="text"
