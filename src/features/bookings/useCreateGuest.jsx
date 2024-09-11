@@ -8,10 +8,8 @@ export function useCreateGuest() {
     onSuccess: () => {
       toast.success("Guest created successfully");
     },
-    onError: () => {
-      toast.error(
-        "Please check if the nationality field is correctly filled in"
-      );
+    onError: (err) => {
+      toast.error(err.message);
     },
   });
 
