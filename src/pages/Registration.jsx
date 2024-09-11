@@ -1,5 +1,6 @@
 import AddBooking from "../features/bookings/AddBooking";
 import AddGuest from "../features/bookings/AddGuest";
+import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 
@@ -15,7 +16,7 @@ function Registration() {
       </Row>
       <Row>
         <Heading as="h2">Register a new booking</Heading>
-        <AddBooking />
+        <Button>Add Booking</Button>
       </Row>
     </>
   );

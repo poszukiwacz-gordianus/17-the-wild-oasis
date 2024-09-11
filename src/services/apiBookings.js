@@ -110,6 +110,25 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
+export async function getOccupiedCabinsFromBookings({ startDate, endDate }) {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("cabinId")
+    .or(
+      `and(startDate.gte.${startDate}T00:00:00, startDate.lte.${endDate}T00:00:00), and(endDate.gte.${startDate}T00:00:00, endDate.lte.${endDate}T00:00:00)`
+    );
+
+  // const { data, error } = await supabase
+  //   .from("bookings")
+  //   .select()
+  //   .or(`not.and(startDate.gte.${startDate}, startDate.lte.${endDate})`)
+  //   .or(`not.and(endDate.gte.${startDate}, endDate.lte.${endDate})`);
+
+  if (error) throw new Error("Can't fetch cabins");
+
+  return data;
+}
+
 export async function updateBooking(id, obj) {
   const { data, error } = await supabase
     .from("bookings")
