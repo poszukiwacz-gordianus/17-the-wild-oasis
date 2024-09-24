@@ -5,8 +5,10 @@ import Form from "../../ui/Form";
 import Input from "../../ui/Input";
 import FormRow from "../../ui/FormRow";
 import Button from "../../ui/Button";
+import SelectCountry from "../../ui/SelectCountry";
 
 import { useCreateGuest } from "./useCreateGuest";
+import { useCountries } from "./useCountries";
 
 CreateGuestForm.propTypes = {
   onCloseModal: PropTypes.func,
@@ -14,26 +16,32 @@ CreateGuestForm.propTypes = {
 
 function CreateGuestForm({ onCloseModal }) {
   const { createGuest, isCreating } = useCreateGuest();
+  const { countries, isLoading } = useCountries();
 
   const isWorking = isCreating;
 
   const { register, handleSubmit, reset, formState } = useForm();
   const { errors } = formState;
 
-  function onSubmit(newGuest) {
+  function onSubmit(formData) {
+    const [nationality, countryFlag] = formData.nationality.split("%");
+
+    const newGuest = {
+      ...formData,
+      nationality: nationality,
+      countryFlag: countryFlag,
+    };
+
     createGuest(newGuest, {
       onSuccess: () => {
-        onCloseModal?.();
+        onCloseModal();
         reset();
       },
     });
   }
 
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      type={onCloseModal ? "modal" : "regular"}
-    >
+    <Form onSubmit={handleSubmit(onSubmit)} type="modal">
       {/* FullName */}
       <FormRow label="Full name" error={errors?.fullName?.message}>
         <Input
@@ -72,24 +80,52 @@ function CreateGuestForm({ onCloseModal }) {
           disabled={isWorking}
           {...register("nationalID", {
             required: "This field is required",
+            pattern: {
+              value: /^[a-zA-Z0-9]{6,12}$/,
+              message: "Please provide a valid National ID",
+            },
           })}
         />
       </FormRow>
 
       {/* //Nationality */}
       <FormRow label="Nationality" error={errors?.nationality?.message}>
-        <Input
-          type="text"
-          id="nationality"
-          disabled={isWorking}
-          {...register("nationality", {
-            required: "This field is required",
-            minLength: {
-              value: 4,
-              message: "Country should be at least 4 characters long",
-            },
-          })}
-        />
+        {isLoading ? (
+          <Input
+            type="text"
+            id="nationality"
+            disabled={isWorking}
+            required
+            {...register("nationality", {
+              required: "This field is required",
+              minLength: {
+                value: 4,
+                message: "Country should be at least 4 characters long",
+              },
+            })}
+          />
+        ) : !countries ? (
+          <Input
+            type="text"
+            id="nationality"
+            disabled={isWorking}
+            required
+            {...register("nationality", {
+              required: "This field is required",
+              minLength: {
+                value: 4,
+                message: "Country should be at least 4 characters long",
+              },
+            })}
+          />
+        ) : (
+          <SelectCountry
+            countries={countries}
+            name="nationality"
+            id="nationality"
+            register={register}
+          />
+        )}
       </FormRow>
 
       <FormRow>
@@ -98,11 +134,11 @@ function CreateGuestForm({ onCloseModal }) {
           variation="secondary"
           type="reset"
           disabled={isWorking}
-          onClick={() => onCloseModal?.()}
+          onClick={onCloseModal}
         >
           Cancel
         </Button>
-        <Button disabled={isWorking}>Add guest</Button>
+        <Button disabled={isWorking}>Register</Button>
       </FormRow>
     </Form>
   );

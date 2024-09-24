@@ -16,7 +16,7 @@ function Registration() {
       </Row>
       <Row>
         <Heading as="h2">Register a new booking</Heading>
-        <Button>Add Booking</Button>
+        <Button>Add new reservation</Button>
       </Row>
     </>
   );

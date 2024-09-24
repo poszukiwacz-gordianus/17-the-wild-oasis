@@ -7,7 +7,7 @@ function AddGuest() {
     <div>
       <Modal>
         <Modal.Open opens="booking-form">
-          <Button>Add new guest</Button>
+          <Button>Register new guest</Button>
         </Modal.Open>
         <Modal.Window name="booking-form">
           <CreateGuestForm />
