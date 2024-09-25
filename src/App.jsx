@@ -22,6 +22,7 @@ const Booking = lazy(() => import("./pages/Booking"));
 const Checkin = lazy(() => import("./pages/Checkin"));
 const Registration = lazy(() => import("./pages/Registration"));
 const NewReservation = lazy(() => import("./pages/NewReservation"));
+const Messages = lazy(() => import("./pages/Messages"));
 
 import ProtectedRoute from "./ui/ProtectedRoute";
 import AdminOnly from "./ui/AdminOnly";
@@ -84,6 +85,7 @@ function App() {
                       </AdminOnly>
                     }
                   />
+                  <Route path="messages" element={<Messages />} />
                   <Route path="settings" element={<Settings />} />
                   <Route path="account" element={<Account />} />
                 </Route>

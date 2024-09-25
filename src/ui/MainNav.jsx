@@ -4,6 +4,7 @@ import {
   HiOutlineCalendarDays,
   HiOutlineClipboard,
   HiOutlineCog6Tooth,
+  HiOutlineEnvelope,
   HiOutlineHome,
   HiOutlineHomeModern,
   HiOutlineUser,
@@ -78,6 +79,12 @@ function MainNav() {
           <StyledNavLink to="/bookings">
             <HiOutlineCalendarDays />
             <span>Bookings</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/messages">
+            <HiOutlineEnvelope />
+            <span>Messages</span>
           </StyledNavLink>
         </li>
         <li>
