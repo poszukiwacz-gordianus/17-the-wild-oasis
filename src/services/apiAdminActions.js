@@ -77,6 +77,9 @@ export async function updateUserByAdmin({
 
 export async function deleteUserByAdmin({ userId }) {
   const isAdmin = await checkIsAdmin();
+  const { id } = await getCurrentUser();
+
+  if (userId === id) throw new Error("You can't delete yourself!");
 
   if (isAdmin) {
     //Get avatar path to delete from supabase
