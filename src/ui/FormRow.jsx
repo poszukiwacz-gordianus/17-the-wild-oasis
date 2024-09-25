@@ -27,7 +27,14 @@ const StyledFormRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 
-  &:has(button) {
+  /* Only apply this to direct children or specific divs, not the entire form */
+  &:has(div) {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1.2rem;
+  }
+
+  &:has(> button) {
     display: flex;
     justify-content: flex-end;
     gap: 1.2rem;
@@ -46,7 +53,7 @@ const Error = styled.span`
 function FormRow({ label, error, children }) {
   return (
     <StyledFormRow>
-      {label && <Label htmlFor={children.props.id}>{label}</Label>}
+      {label && <Label htmlFor={children?.props?.id}>{label}</Label>}
       {children}
       {error && <Error>{error}</Error>}
     </StyledFormRow>

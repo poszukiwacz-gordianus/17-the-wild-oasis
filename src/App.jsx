@@ -1,30 +1,34 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
 import { Toaster } from "react-hot-toast";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //Styles
 import GlobalStyles from "./styles/GlobalStyles";
 
 //pages
-import Dashboard from "./pages/Dashboard";
-import Bookings from "./pages/Bookings";
-import Cabins from "./pages/Cabins";
-import Users from "./pages/Users";
-import Settings from "./pages/Settings";
-import Account from "./pages/Account";
-import Login from "./pages/Login";
-import PageNotFound from "./pages/PageNotFound";
-import AppLayout from "./ui/AppLayout";
-import Booking from "./pages/Booking";
-import Checkin from "./pages/Checkin";
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Bookings = lazy(() => import("./pages/Bookings"));
+const Cabins = lazy(() => import("./pages/Cabins"));
+const Users = lazy(() => import("./pages/Users"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Account = lazy(() => import("./pages/Account"));
+const Login = lazy(() => import("./pages/Login"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const Booking = lazy(() => import("./pages/Booking"));
+const Checkin = lazy(() => import("./pages/Checkin"));
+const Registration = lazy(() => import("./pages/Registration"));
+const NewReservation = lazy(() => import("./pages/NewReservation"));
 
 import ProtectedRoute from "./ui/ProtectedRoute";
-import { DarkModeProvider } from "./context/DarkModeContext";
 import AdminOnly from "./ui/AdminOnly";
-import Registration from "./pages/Registration";
-import RegisterBooking from "./pages/RegisterBooking";
+import AppLayout from "./ui/AppLayout";
+
+import { DarkModeProvider } from "./context/DarkModeContext";
+import Spinner from "./ui/Spinner";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,43 +52,43 @@ function App() {
     <DarkModeProvider>
       <StyleSheetManager shouldForwardProp={shouldForwardProp}>
         <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
           <GlobalStyles />
           <BrowserRouter>
-            <Routes>
-              <Route index element={<Navigate replace to="dashboard" />} />
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route index element={<Navigate replace to="dashboard" />} />
 
-              <Route path="login" element={<Login />} />
-              <Route path="*" element={<PageNotFound />} />
+                <Route path="login" element={<Login />} />
+                <Route path="*" element={<PageNotFound />} />
 
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="registration" element={<Registration />} />
-                <Route path="bookings" element={<Bookings />} />
-                <Route path="booking/:bookingId" element={<Booking />} />
                 <Route
-                  path="booking/register-booking"
-                  element={<RegisterBooking />}
-                />
-                <Route path="checkin/:bookingId" element={<Checkin />} />
-                <Route path="cabins" element={<Cabins />} />
-                <Route
-                  path="users"
                   element={
-                    <AdminOnly>
-                      <Users />
-                    </AdminOnly>
+                    <ProtectedRoute>
+                      <AppLayout />
+                    </ProtectedRoute>
                   }
-                />
-                <Route path="settings" element={<Settings />} />
-                <Route path="account" element={<Account />} />
-              </Route>
-            </Routes>
+                >
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="registration" element={<Registration />} />
+                  <Route path="new-reservation" element={<NewReservation />} />
+                  <Route path="bookings" element={<Bookings />} />
+                  <Route path="booking/:bookingId" element={<Booking />} />
+                  <Route path="checkin/:bookingId" element={<Checkin />} />
+                  <Route path="cabins" element={<Cabins />} />
+                  <Route
+                    path="users"
+                    element={
+                      <AdminOnly>
+                        <Users />
+                      </AdminOnly>
+                    }
+                  />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="account" element={<Account />} />
+                </Route>
+              </Routes>
+            </Suspense>
           </BrowserRouter>
 
           <Toaster

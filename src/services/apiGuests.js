@@ -1,6 +1,19 @@
 import supabase from "./supabase";
 import { getCountryCode } from "countries-list";
 
+export async function getGuests() {
+  const { data, error } = await supabase
+    .from("guests")
+    .select()
+    .order("created_at", {
+      ascending: false,
+    });
+
+  if (error) throw new Error("Could not load guests");
+
+  return data;
+}
+
 export async function createGuest(newGuest) {
   //If country was writen
   let countryCode;
@@ -36,7 +49,9 @@ export async function createGuest(newGuest) {
 
 export async function getCountries() {
   try {
-    const res = await fetch("https://restcountrie.com/v2/all?fields=name,flag");
+    const res = await fetch(
+      "https://restcountries.com/v2/all?fields=name,flag"
+    );
     const countries = await res.json();
     return countries;
   } catch {

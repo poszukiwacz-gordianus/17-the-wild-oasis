@@ -2,6 +2,34 @@ import supabase from "./supabase";
 
 import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
+import { eachDayOfInterval, isWithinInterval } from "date-fns";
+
+export async function createBooking({ booking }) {
+  //Check on server side if dates are already booked
+  function isAlreadyBooked(from, to, datesArr) {
+    return (
+      from &&
+      to &&
+      datesArr.some((date) => isWithinInterval(date, { start: from, end: to }))
+    );
+  }
+
+  const bookedDates = await getBookedDates(booking.cabinId, booking.guestId);
+
+  if (isAlreadyBooked(booking.startDate, booking.endDate, bookedDates))
+    throw new Error(
+      "Oops, looks like someone else beat you to it! These dates are already reserved. Why not try a different date?"
+    );
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert([booking])
+    .select("id");
+
+  if (error) throw new Error("Booking could not be created");
+
+  return data[0].id;
+}
 
 export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
@@ -53,6 +81,42 @@ export async function getBooking(id) {
   }
 
   return data;
+}
+
+export async function getBookedDates(cabinId, guestId) {
+  let today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  today = today.toISOString();
+
+  // Combine queries for cabin and guest into a single request
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .or(`cabinId.eq.${cabinId},guestId.eq.${guestId}`)
+    .or(`startDate.gte.${today},status.eq.checked-in`);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Bookings could not get loaded");
+  }
+
+  // Avoid duplicate bookings for the same guest and cabin
+  const uniqueBookings = data.filter(
+    (booking, index, self) =>
+      index === self.findIndex((b) => b.id === booking.id)
+  );
+
+  // Converting to actual dates to be displayed in the date picker
+  const bookedDates = uniqueBookings
+    .map((booking) => {
+      return eachDayOfInterval({
+        start: new Date(booking.startDate),
+        end: new Date(booking.endDate),
+      });
+    })
+    .flat();
+
+  return bookedDates;
 }
 
 // Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
