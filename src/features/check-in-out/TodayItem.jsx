@@ -12,7 +12,19 @@ import { useCheckOut } from "./useCheckout";
 
 const StyledTodayItem = styled.li`
   display: grid;
-  grid-template-columns: 9rem 2rem 1fr 7rem 9rem;
+  grid-template-columns: 1fr 9rem;
+  gap: 1.2rem;
+  align-items: center;
+`;
+
+const Guest = styled.div`
+  font-weight: 500;
+`;
+
+// Styled Link
+const StyledLink = styled(Link)`
+  display: grid;
+  grid-template-columns: 9rem 2rem 1fr 7rem;
   gap: 1.2rem;
   align-items: center;
 
@@ -25,10 +37,6 @@ const StyledTodayItem = styled.li`
   }
 `;
 
-const Guest = styled.div`
-  font-weight: 500;
-`;
-
 TodayItem.propTypes = {
   activity: PropTypes.object,
 };
@@ -39,12 +47,14 @@ function TodayItem({ activity }) {
 
   return (
     <StyledTodayItem>
-      {status === "unconfirmed" && <Tag type="green">Arriving</Tag>}
-      {status === "checked-in" && <Tag type="blue">Departing</Tag>}
+      <StyledLink to={`/booking/${id}`}>
+        {status === "unconfirmed" && <Tag type="green">Arriving</Tag>}
+        {status === "checked-in" && <Tag type="blue">Departing</Tag>}
 
-      <Flag src={guests.countryFlag} alt={`Flag of ${guests.country}`} />
-      <Guest>{guests.fullName}</Guest>
-      <div>{numNights} nights</div>
+        <Flag src={guests.countryFlag} alt={`Flag of ${guests.country}`} />
+        <Guest>{guests.fullName}</Guest>
+        <div>{numNights} nights</div>
+      </StyledLink>
 
       {status === "unconfirmed" && (
         <Button
@@ -60,7 +70,14 @@ function TodayItem({ activity }) {
       {status === "checked-in" && (
         <Modal>
           <Modal.Open opens="checkout">
-            <Button size="small" variation="primary" disabled={isCheckingOut}>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+              size="small"
+              variation="primary"
+              disabled={isCheckingOut}
+            >
               Check out
             </Button>
           </Modal.Open>

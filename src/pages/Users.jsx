@@ -1,13 +1,19 @@
-import SignupForm from "../features/authentication/SignupForm";
+import AddUser from "../features/users/AddUser";
+import UsersTable from "../features/users/UsersTable";
 import Heading from "../ui/Heading";
-
-function NewUsers() {
+import Row from "../ui/Row";
+function Users() {
   return (
     <>
-      <Heading as="h1">Create a new user</Heading>
-      <SignupForm />
+      <Row type="horizontal">
+        <Heading as="h1">All users</Heading>
+      </Row>
+      <Row>
+        <UsersTable />
+        <AddUser />
+      </Row>
     </>
   );
 }
 
-export default NewUsers;
+export default Users;

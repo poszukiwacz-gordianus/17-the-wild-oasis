@@ -18,22 +18,22 @@ CreateCabinForm.propTypes = {
 
 function CreateCabinForm({ cabinToUpdate = {}, onCloseModal }) {
   const { isCreating, createCabin } = useCreateCabin();
-  const { isEditing, updateCabin } = useUpdateCabin();
+  const { isUpdating, updateCabin } = useUpdateCabin();
 
-  const isWorking = isCreating || isEditing;
+  const isWorking = isCreating || isUpdating;
 
   const { id: updateId, ...updateValues } = cabinToUpdate;
-  const idUpdateSession = Boolean(updateId);
+  const isUpdateSession = Boolean(updateId);
 
   const { register, handleSubmit, reset, getValues, formState } = useForm({
-    defaultValues: idUpdateSession ? updateValues : {},
+    defaultValues: isUpdateSession ? updateValues : {},
   });
   const { errors } = formState;
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
 
-    if (idUpdateSession)
+    if (isUpdateSession)
       updateCabin(
         {
           newCabinData: { ...data, image },
@@ -145,7 +145,7 @@ function CreateCabinForm({ cabinToUpdate = {}, onCloseModal }) {
           accept="image/*"
           disabled={isWorking}
           {...register("image", {
-            required: idUpdateSession ? false : "This field is required",
+            required: isUpdateSession ? false : "This field is required",
           })}
         />
       </FormRow>
@@ -155,12 +155,13 @@ function CreateCabinForm({ cabinToUpdate = {}, onCloseModal }) {
         <Button
           variation="secondary"
           type="reset"
+          disabled={isWorking}
           onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
         <Button disabled={isWorking}>
-          {idUpdateSession ? "Edit cabin" : "Create new cabin"}
+          {isUpdateSession ? "Edit cabin" : "Create new cabin"}
         </Button>
       </FormRow>
     </Form>

@@ -1,7 +1,10 @@
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function getCabins() {
-  const { data, error } = await supabase.from("cabins").select("*");
+  const { data, error } = await supabase
+    .from("cabins")
+    .select("*")
+    .order("name");
 
   if (error) {
     console.error(error);
@@ -46,7 +49,7 @@ export async function createUpdateCabin(
 
   if (error) {
     console.error(error);
-    throw new Error("Cabin could not been created");
+    throw new Error("Cabin could not be created");
   }
 
   //2. Upload/Delete image

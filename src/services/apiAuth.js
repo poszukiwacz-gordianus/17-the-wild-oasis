@@ -1,13 +1,15 @@
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function signup({ fullName, email, password }) {
+export async function signup({ fullName, email, password, role, phone }) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    phone,
     options: {
       data: {
         fullName,
         avatar: "",
+        role,
       },
     },
   });
@@ -47,6 +49,7 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   //1. Update password OR fullName
   let updateData;
   if (password) updateData = { password };
+  console.log(updateData);
   if (fullName)
     updateData = {
       data: {
