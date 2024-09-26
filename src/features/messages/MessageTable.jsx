@@ -1,17 +1,18 @@
+import { useEffect, useState } from "react";
+import supabase from "../../services/supabase"; // Ensure this path is correct
+import toast from "react-hot-toast";
+
 import Spinner from "../../ui/Spinner";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
-
 import MessageRow from "./MessageRow";
 
-import { useEffect, useState } from "react";
-import supabase from "../../services/supabase"; // Ensure this path is correct
 import { useLogs } from "./useLogs";
-import toast from "react-hot-toast";
+import Pagination from "../../ui/Pagination";
 
 function MessageArea() {
-  const { isLoading, logs } = useLogs();
+  const { isLoading, logs, count } = useLogs();
   const [realtimeLogs, setRealtimeLogs] = useState([]);
 
   useEffect(() => {
@@ -53,6 +54,9 @@ function MessageArea() {
           render={(log) => <MessageRow log={log} key={log.id} />}
         />
       </Table>
+      <Table.Footer>
+        <Pagination count={count} />
+      </Table.Footer>
     </Menus>
   );
 }

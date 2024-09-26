@@ -82,15 +82,15 @@ function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/messages">
-            <HiOutlineEnvelope />
-            <span>Messages</span>
-          </StyledNavLink>
-        </li>
-        <li>
           <StyledNavLink to="/cabins">
             <HiOutlineHomeModern />
             <span>Cabins</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/messages">
+            <HiOutlineEnvelope />
+            <span>Messages</span>
           </StyledNavLink>
         </li>
         {isAdmin && (
