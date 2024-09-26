@@ -1,9 +1,9 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager } from "styled-components";
-import toast, { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 //Styles
@@ -30,8 +30,7 @@ import AppLayout from "./ui/AppLayout";
 import Spinner from "./ui/Spinner";
 
 import { DarkModeProvider } from "./context/DarkModeContext";
-import { useMessageContext } from "./context/MessageContext";
-import supabase from "./services/supabase";
+import { MessageProvider } from "./context/MessageContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -51,95 +50,77 @@ function shouldForwardProp(propName, target) {
 }
 
 function App() {
-  const { setNewMessageCount, setRealtimeLogs } = useMessageContext();
-
-  // Listen for new logs globally
-  useEffect(() => {
-    const channel = supabase
-      .channel("realtime logs")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "logs" },
-        (payload) => {
-          setNewMessageCount((prevCount) => prevCount + 1);
-          setRealtimeLogs((prevLogs) => [payload.new, ...prevLogs]);
-          toast.success("New message");
-        }
-      )
-      .subscribe();
-
-    // Cleanup subscription
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [setNewMessageCount, setRealtimeLogs]);
-
   return (
     <DarkModeProvider>
-      <StyleSheetManager shouldForwardProp={shouldForwardProp}>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools />
-          <GlobalStyles />
-          <BrowserRouter>
-            <Suspense fallback={<Spinner />}>
-              <Routes>
-                <Route index element={<Navigate replace to="dashboard" />} />
+      <MessageProvider>
+        <StyleSheetManager shouldForwardProp={shouldForwardProp}>
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            <GlobalStyles />
+            <BrowserRouter>
+              <Suspense fallback={<Spinner />}>
+                <Routes>
+                  <Route index element={<Navigate replace to="dashboard" />} />
 
-                <Route path="login" element={<Login />} />
-                <Route path="*" element={<PageNotFound />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="*" element={<PageNotFound />} />
 
-                <Route
-                  element={
-                    <ProtectedRoute>
-                      <AppLayout />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route path="dashboard" element={<Dashboard />} />
-                  <Route path="registration" element={<Registration />} />
-                  <Route path="new-reservation" element={<NewReservation />} />
-                  <Route path="bookings" element={<Bookings />} />
-                  <Route path="booking/:bookingId" element={<Booking />} />
-                  <Route path="checkin/:bookingId" element={<Checkin />} />
-                  <Route path="cabins" element={<Cabins />} />
                   <Route
-                    path="users"
                     element={
-                      <AdminOnly>
-                        <Users />
-                      </AdminOnly>
+                      <ProtectedRoute>
+                        <AppLayout />
+                      </ProtectedRoute>
                     }
-                  />
-                  <Route path="messages" element={<Messages />} />
-                  <Route path="settings" element={<Settings />} />
-                  <Route path="account" element={<Account />} />
-                </Route>
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
+                  >
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="registration" element={<Registration />} />
+                    <Route
+                      path="new-reservation"
+                      element={<NewReservation />}
+                    />
+                    <Route path="bookings" element={<Bookings />} />
+                    <Route path="booking/:bookingId" element={<Booking />} />
+                    <Route path="checkin/:bookingId" element={<Checkin />} />
+                    <Route path="cabins" element={<Cabins />} />
+                    <Route
+                      path="users"
+                      element={
+                        <AdminOnly>
+                          <Users />
+                        </AdminOnly>
+                      }
+                    />
+                    <Route path="messages" element={<Messages />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="account" element={<Account />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
 
-          <Toaster
-            position="top-center"
-            gutter={12}
-            containerStyle={{ margin: "8px" }}
-            toastOptions={{
-              success: {
-                duration: 3000,
-              },
-              error: {
-                duration: 5000,
-              },
-              style: {
-                fontSize: "16px",
-                maxWidth: "500px",
-                padding: "16px 24px",
-                backgroundColor: "var(--color-grey-0)",
-                color: "var(--color-grey-700)",
-              },
-            }}
-          />
-        </QueryClientProvider>
-      </StyleSheetManager>
+            <Toaster
+              position="top-center"
+              gutter={12}
+              containerStyle={{ margin: "8px" }}
+              toastOptions={{
+                success: {
+                  duration: 3000,
+                },
+                error: {
+                  duration: 5000,
+                },
+                style: {
+                  fontSize: "16px",
+                  maxWidth: "500px",
+                  padding: "16px 24px",
+                  backgroundColor: "var(--color-grey-0)",
+                  color: "var(--color-grey-700)",
+                },
+              }}
+            />
+          </QueryClientProvider>
+        </StyleSheetManager>
+      </MessageProvider>
     </DarkModeProvider>
   );
 }
