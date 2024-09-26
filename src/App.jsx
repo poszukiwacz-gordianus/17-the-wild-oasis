@@ -52,9 +52,9 @@ function shouldForwardProp(propName, target) {
 function App() {
   return (
     <DarkModeProvider>
-      <MessageProvider>
-        <StyleSheetManager shouldForwardProp={shouldForwardProp}>
-          <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <MessageProvider>
+          <StyleSheetManager shouldForwardProp={shouldForwardProp}>
             <ReactQueryDevtools />
             <GlobalStyles />
             <BrowserRouter>
@@ -118,9 +118,9 @@ function App() {
                 },
               }}
             />
-          </QueryClientProvider>
-        </StyleSheetManager>
-      </MessageProvider>
+          </StyleSheetManager>
+        </MessageProvider>
+      </QueryClientProvider>
     </DarkModeProvider>
   );
 }

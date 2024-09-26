@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import supabase from "../services/supabase";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import supabase from "../services/supabase";
+import PropTypes from "prop-types";
 
 MessageProvider.propTypes = {
   children: PropTypes.any,
@@ -10,8 +11,8 @@ MessageProvider.propTypes = {
 const MessageContext = createContext();
 
 function MessageProvider({ children }) {
-  const [newMessageCount, setNewMessageCount] = useState(0);
   const [realtimeLogs, setRealtimeLogs] = useState([]);
+  const queryClient = useQueryClient();
 
   // Listen for new logs
   useEffect(() => {
@@ -21,9 +22,13 @@ function MessageProvider({ children }) {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "logs" },
         (payload) => {
-          setNewMessageCount((prevCount) => prevCount + 1);
           setRealtimeLogs((prevLogs) => [payload.new, ...prevLogs]);
-          toast.success("New message");
+          toast("New message!", {
+            icon: "📫",
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["newLogs"],
+          });
         }
       )
       .subscribe();
@@ -32,13 +37,11 @@ function MessageProvider({ children }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [setNewMessageCount, setRealtimeLogs]);
+  }, [setRealtimeLogs]);
 
   return (
     <MessageContext.Provider
       value={{
-        newMessageCount,
-        setNewMessageCount,
         realtimeLogs,
         setRealtimeLogs,
       }}

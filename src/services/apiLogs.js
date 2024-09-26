@@ -58,3 +58,12 @@ export async function markLogsAsRead(logs) {
     if (error) console.error(error.message);
   }
 }
+
+export async function deleteLogs() {
+  const { error } = await supabase.from("logs").delete().eq("new", false);
+
+  if (error) {
+    console.error("Error while deleting logs:", error.message);
+    throw new Error("Error while deleting logs");
+  }
+}
