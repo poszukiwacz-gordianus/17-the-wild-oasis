@@ -1,40 +1,25 @@
-import { useEffect, useState } from "react";
-import supabase from "../../services/supabase"; // Ensure this path is correct
-import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 import Spinner from "../../ui/Spinner";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
+import Pagination from "../../ui/Pagination";
 import MessageRow from "./MessageRow";
 
 import { useLogs } from "./useLogs";
-import Pagination from "../../ui/Pagination";
+import { useMessageContext } from "../../context/MessageContext";
 
 function MessageArea() {
+  const { setNewMessageCount, realtimeLogs, setRealtimeLogs } =
+    useMessageContext();
+
   const { isLoading, logs, count } = useLogs();
-  const [realtimeLogs, setRealtimeLogs] = useState([]);
 
   useEffect(() => {
     setRealtimeLogs(logs);
-    // Subscribe to real-time updates
-    const channel = supabase
-      .channel("realtime logs")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "logs" },
-        (payload) => {
-          setRealtimeLogs((prevLogs) => [payload.new, ...prevLogs]);
-          toast.success("New message");
-        }
-      )
-      .subscribe();
-
-    // Cleanup channel on unmount
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [logs]);
+    setNewMessageCount(0); // Reset new message count when logs are fetched
+  }, [logs, setNewMessageCount, setRealtimeLogs]);
 
   if (isLoading) return <Spinner />;
   if (!realtimeLogs?.length) return <Empty resourceName="messages" />;

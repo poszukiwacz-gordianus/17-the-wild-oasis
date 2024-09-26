@@ -41,7 +41,7 @@ export function useLogs() {
       queryFn: () => getLogs({ filter, sortBy, page: +1 }),
     });
 
-  if (page < pageCount)
+  if (page > pageCount)
     queryClient.prefetchQuery({
       queryKey: ["logs", filter, sortBy, page - 1],
       queryFn: () => getLogs({ filter, sortBy, page: -1 }),

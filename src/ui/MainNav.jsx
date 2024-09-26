@@ -11,6 +11,7 @@ import {
 } from "react-icons/hi2";
 
 import { useAdmin } from "../features/users/useAdmin";
+import { useMessageContext } from "../context/MessageContext";
 
 const NavList = styled.ul`
   display: flex;
@@ -59,6 +60,7 @@ const StyledNavLink = styled(NavLink)`
 
 function MainNav() {
   const { isAdmin } = useAdmin();
+  const { newMessageCount } = useMessageContext();
 
   return (
     <nav>
@@ -91,6 +93,7 @@ function MainNav() {
           <StyledNavLink to="/messages">
             <HiOutlineEnvelope />
             <span>Messages</span>
+            {newMessageCount > 0 && <span>{newMessageCount}</span>}
           </StyledNavLink>
         </li>
         {isAdmin && (
