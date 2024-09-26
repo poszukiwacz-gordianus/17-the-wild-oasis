@@ -12,6 +12,7 @@ import {
 
 import { useAdmin } from "../features/users/useAdmin";
 import { useMessageContext } from "../context/MessageContext";
+import { useNewLogs } from "../features/messages/useNewLogs";
 
 const NavList = styled.ul`
   display: flex;
@@ -61,6 +62,7 @@ const StyledNavLink = styled(NavLink)`
 function MainNav() {
   const { isAdmin } = useAdmin();
   const { newMessageCount } = useMessageContext();
+  const { count } = useNewLogs();
 
   return (
     <nav>
@@ -93,7 +95,8 @@ function MainNav() {
           <StyledNavLink to="/messages">
             <HiOutlineEnvelope />
             <span>Messages</span>
-            {newMessageCount > 0 && <span>{newMessageCount}</span>}
+            {newMessageCount > 0 && <span>{`(${newMessageCount})`}</span>}
+            {count > 0 && <span>{`(${count})`}</span>}
           </StyledNavLink>
         </li>
         {isAdmin && (

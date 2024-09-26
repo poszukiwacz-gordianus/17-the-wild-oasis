@@ -31,3 +31,30 @@ export async function getLogs({ filter, sortBy, page }) {
 
   return { data, error, count };
 }
+
+export async function getNewLogs() {
+  const { data, error, count } = await supabase
+    .from("logs")
+    .select("new", { count: "exact" })
+    .eq("new", true);
+
+  if (error) console.error(error.message);
+
+  return { data, error, count };
+}
+
+export async function markLogsAsRead(logs) {
+  // Filter logs that are marked as new
+  const logsToMarkAsRead = logs.filter((log) => log.new === true);
+
+  if (logsToMarkAsRead.length > 0) {
+    const logIds = logsToMarkAsRead.map((log) => log.id);
+
+    const { error } = await supabase
+      .from("logs")
+      .update({ new: false })
+      .in("id", logIds); // Update only the logs on this page
+
+    if (error) console.error(error.message);
+  }
+}
