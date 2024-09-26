@@ -32,7 +32,7 @@ function ProtectedRoute({ children }) {
   if (isLoading)
     return (
       <FullPage>
-        <Spinner />;
+        <Spinner />
       </FullPage>
     );
 

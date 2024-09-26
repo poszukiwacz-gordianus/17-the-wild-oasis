@@ -43,10 +43,11 @@ function ConfirmDelete({
         {action} {resourceName}
       </Heading>
       <p>
-        Are you sure you want to {action.toLowerCase()} this {resourceName}?
-        {action === "Delete" &&
-          ` permanently? This
-        action cannot be undone.`}
+        Are you sure you want to {action.toLowerCase()} this {resourceName}
+        {action === "Delete"
+          ? ` permanently? This
+        action cannot be undone.`
+          : "?"}
       </p>
 
       <div>
@@ -57,7 +58,13 @@ function ConfirmDelete({
         >
           Cancel
         </Button>
-        <Button variation="danger" disabled={disabled} onClick={onConfirm}>
+        <Button
+          variation="danger"
+          disabled={disabled}
+          onClick={() => {
+            onConfirm(), onCloseModal();
+          }}
+        >
           {action}
         </Button>
       </div>

@@ -4,12 +4,14 @@ import {
   HiOutlineCalendarDays,
   HiOutlineClipboard,
   HiOutlineCog6Tooth,
+  HiOutlineEnvelope,
   HiOutlineHome,
   HiOutlineHomeModern,
   HiOutlineUser,
 } from "react-icons/hi2";
 
 import { useAdmin } from "../features/users/useAdmin";
+import { useNewLogs } from "../features/messages/useNewLogs";
 
 const NavList = styled.ul`
   display: flex;
@@ -58,6 +60,8 @@ const StyledNavLink = styled(NavLink)`
 
 function MainNav() {
   const { isAdmin } = useAdmin();
+  // const { newMessageCount } = useMessageContext();
+  const { count } = useNewLogs();
 
   return (
     <nav>
@@ -84,6 +88,13 @@ function MainNav() {
           <StyledNavLink to="/cabins">
             <HiOutlineHomeModern />
             <span>Cabins</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/messages">
+            <HiOutlineEnvelope />
+            <span>Messages</span>
+            {count > 0 && <span>{`(${count})`}</span>}
           </StyledNavLink>
         </li>
         {isAdmin && (

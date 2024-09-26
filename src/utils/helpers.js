@@ -72,3 +72,20 @@ export function isAlreadyBooked(range, datesArr) {
     )
   );
 }
+
+export function formatTimeAndDate(string) {
+  const date = new Date(string);
+
+  const formattedDate = date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "2-digit",
+  });
+
+  const formattedTime = date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return `${formattedDate} at ${formattedTime}`;
+}
