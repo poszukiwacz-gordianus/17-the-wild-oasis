@@ -95,7 +95,7 @@ function UpdateSettingsForm() {
         <span>Delete all read messages</span>
         <Modal>
           <Modal.Open opens="delete">
-            <Button size="large" variation="danger" disabled={isDeleting}>
+            <Button size="medium" variation="danger" disabled={isDeleting}>
               Delete
             </Button>
           </Modal.Open>

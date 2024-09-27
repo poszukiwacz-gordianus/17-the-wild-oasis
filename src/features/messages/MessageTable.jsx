@@ -20,6 +20,8 @@ function MessageArea() {
     if (logs?.length > 0) {
       markLogsAsRead(logs); // Mark only the current logs as read
       setRealtimeLogs(logs); // Set logs
+    } else {
+      setRealtimeLogs([]); // Clear logs when none are available
     }
   }, [logs, setRealtimeLogs, markLogsAsRead]);
 

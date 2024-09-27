@@ -37,7 +37,7 @@ function MessageProvider({ children }) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [setRealtimeLogs]);
+  }, [setRealtimeLogs, queryClient]);
 
   return (
     <MessageContext.Provider
