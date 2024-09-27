@@ -4,7 +4,8 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 
 ## My additions to the original project:
 
-1. Admin-Only User Management: The user page is now restricted to admin users. Admins can manage employees, including:
+<or>
+<li> Admin-Only User Management: The user page is now restricted to admin users. Admins can manage employees, including:
 <ul>
 <li> Registering new users.
 </li>
@@ -13,8 +14,9 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 <li>Deleting users.
 </li>
 </ul>
+</li>
 
-2. Registration Page: A new page where employees can:
+<li> Registration Page: A new page where employees can:
 <ul>
 <li> Register guests.
 
@@ -22,9 +24,10 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 <li>Create new bookings.
 </li>
 </ul>
+</li>
 
-3. Today’s Activity: Added a quick link to redirect users to the current booking for easy access.
-4. Message (Logs) Page: A new page dedicated to displaying logs, which are generated when:
+<li> Today’s Activity: Added a quick link to redirect users to the current booking for easy access. </li>
+<li> Message (Logs) Page: A new page dedicated to displaying logs, which are generated when:
 <ul>
 <li> A user creates an account.
 
@@ -34,8 +37,9 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 <li>A reservation is canceled.
 </li>
 </ul>
+</li>
 
-5. Real-Time Logs and Notifications:
+<li> Real-Time Logs and Notifications:
 <ul>
 <li> Logs are updated in real time on the message page.
 
@@ -46,8 +50,9 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 <li>A message notification system is in place, showing alerts when new logs are created.
 </li>
 </ul>
+</li>
 
-6. Settings Option: Added a feature in the settings to remove all read messages, keeping the message page organized.
+<li> Settings Option: Added a feature in the settings to remove all read messages, keeping the message page organized.</li>
 
 ## Deployement
 
