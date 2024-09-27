@@ -4,7 +4,7 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 
 ## My additions to the original project:
 
-<or>
+<ol>
 <li> Admin-Only User Management: The user page is now restricted to admin users. Admins can manage employees, including:
 <ul>
 <li> Registering new users.
@@ -53,7 +53,7 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 </li>
 
 <li> Settings Option: Added a feature in the settings to remove all read messages, keeping the message page organized.</li>
-
+</ol>
 ## Deployement
 
 The project is deployed on Vercel. Check out the live demo here:
