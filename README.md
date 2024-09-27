@@ -54,6 +54,7 @@ Main project in Jonas Schmedtmann's <a href="https://www.udemy.com/course/the-ul
 
 <li> Settings Option: Added a feature in the settings to remove all read messages, keeping the message page organized.</li>
 </ol>
+
 ## Deployement
 
 The project is deployed on Vercel. Check out the live demo here:
