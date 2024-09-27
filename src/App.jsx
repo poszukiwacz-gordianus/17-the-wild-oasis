@@ -67,33 +67,30 @@ function App() {
                 <Route
                   element={
                     <ProtectedRoute>
-                      <AppLayout />
+                      <MessageProvider>
+                        <AppLayout />
+                      </MessageProvider>
                     </ProtectedRoute>
                   }
                 >
-                  <MessageProvider>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="registration" element={<Registration />} />
-                    <Route
-                      path="new-reservation"
-                      element={<NewReservation />}
-                    />
-                    <Route path="bookings" element={<Bookings />} />
-                    <Route path="booking/:bookingId" element={<Booking />} />
-                    <Route path="checkin/:bookingId" element={<Checkin />} />
-                    <Route path="cabins" element={<Cabins />} />
-                    <Route
-                      path="users"
-                      element={
-                        <AdminOnly>
-                          <Users />
-                        </AdminOnly>
-                      }
-                    />
-                    <Route path="messages" element={<Messages />} />
-                    <Route path="settings" element={<Settings />} />
-                    <Route path="account" element={<Account />} />
-                  </MessageProvider>
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="registration" element={<Registration />} />
+                  <Route path="new-reservation" element={<NewReservation />} />
+                  <Route path="bookings" element={<Bookings />} />
+                  <Route path="booking/:bookingId" element={<Booking />} />
+                  <Route path="checkin/:bookingId" element={<Checkin />} />
+                  <Route path="cabins" element={<Cabins />} />
+                  <Route
+                    path="users"
+                    element={
+                      <AdminOnly>
+                        <Users />
+                      </AdminOnly>
+                    }
+                  />
+                  <Route path="messages" element={<Messages />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="account" element={<Account />} />
                 </Route>
               </Routes>
             </Suspense>
